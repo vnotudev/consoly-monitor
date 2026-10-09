@@ -30,7 +30,11 @@ floating in-app panel or in the console.
 [Consoly]    POST 500 https://api.shop.dev/analytics/view 240ms 52B
 ```
 
-## Install as a dev dependency
+## Install
+
+You can add it either way. Pick one.
+
+### Option A: `dev_dependencies` (recommended)
 
 ```sh
 flutter pub add --dev consoly_monitor
@@ -41,7 +45,41 @@ dev_dependencies:
   consoly_monitor: ^0.1.0
 ```
 
-Because it's a dev dependency, import it **only from a dev entrypoint**. Your
+### Option B: `dependencies`
+
+```sh
+flutter pub add consoly_monitor
+```
+
+```yaml
+dependencies:
+  consoly_monitor: ^0.1.0
+```
+
+With this option you can import the package from any file, including your
+normal `main.dart`, with no lint ignore and no separate entrypoint:
+
+```dart
+void main() {
+  ConsolyMonitor.init(); // inactive in release builds by default
+  runApp(MaterialApp(
+    navigatorObservers: [ConsolyNavigatorObserver()],
+    builder: ConsolyMonitor.builder,
+    home: const HomePage(),
+  ));
+}
+```
+
+The package code still ships in release builds, but it does nothing there:
+no `HttpClient` wrapping, no overlay, no recording. To turn it on in a
+release or profile build, pass `ConsolyMonitor.init(enabled: true)`. You can
+also drive it from a flag, for example
+`enabled: const bool.fromEnvironment('CONSOLY')`, then run
+`flutter run --dart-define=CONSOLY=true`.
+
+### Option A in detail: dev entrypoint
+
+With a dev dependency, import it **only from a dev entrypoint**. Your
 production `main.dart` then never contains any monitoring code.
 
 ```dart
@@ -87,9 +125,7 @@ flutter build apk                    # lib/main.dart, no monitor
 > `depend_on_referenced_packages` lint expects packages imported from `lib/`
 > to be regular dependencies.
 >
-> If you'd rather import it from your normal `main.dart`, list it under
-> `dependencies` instead. `ConsolyMonitor.init()` is disabled in release
-> builds by default, so the monitor stays inactive there.
+> If you'd rather skip the separate entrypoint, use Option B above.
 
 ## Setup in 3 steps
 
