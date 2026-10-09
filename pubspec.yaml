@@ -1,0 +1,30 @@
+name: consoly_monitor
+description: >-
+  Dev tool that monitors every API call your Flutter app makes and groups
+  them by page (route). In-app overlay, console summaries, cURL export.
+version: 0.1.0
+# TODO: point these at your public repository before publishing.
+homepage: https://github.com/your-github-user/consoly_monitor
+repository: https://github.com/your-github-user/consoly_monitor
+issue_tracker: https://github.com/your-github-user/consoly_monitor/issues
+topics:
+  - network
+  - debugging
+  - http
+  - logging
+  - devtools
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
